@@ -140,3 +140,170 @@ h1 {
 
 .reason-heart:hover .reason-text {
     opacity: 1;
+ top: -80px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1.1rem;
+}
+
+.btn-yes {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+.btn-no {
+    background-color: var(--lavender);
+    color: #6a4c93;
+    position: absolute;
+}
+
+#success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.95);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.countdown {
+    margin-top: 20px;
+    font-weight: 600;
+    color: #d81b60;
+    font-size: 1.5rem;
+}
+
+footer {
+    margin-top: 50px;
+    font-size: 0.8rem;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="floating-elements" id="bg-elements"></div>
+
+<div class="container">
+
+<div class="photo-frame">
+    <img src="Deba Shitz 2.jpg" alt="Shewta & You">
+</div>
+
+<h1>Will you be my Valentine, Shewta? 💕</h1>
+
+<div class="message">
+<p>From the moment I met you, my heart knew you were the one. You make every day brighter, every laugh louder, and every moment more meaningful. Let's make this Valentine's Day magical together!</p>
+</div>
+
+<p style="margin-bottom:20px; font-style:italic;">Tap the hearts to see why I love you...</p>
+
+<div class="hearts-grid">
+<div class="reason-heart">💖 <span class="reason-text">Your smile lights up my whole world!</span></div>
+<div class="reason-heart">🍭 <span class="reason-text">You're the sweetest person I know.</span></div>
+<div class="reason-heart">✨ <span class="reason-text">You inspire me every single day.</span></div>
+<div class="reason-heart">🌸 <span class="reason-text">Being with you feels like home.</span></div>
+<div class="reason-heart">🧸 <span class="reason-text">Your hugs are my favorite place.</span></div>
+</div>
+
+<div class="btn-group">
+<button class="btn btn-yes" onclick="celebrate()">YES ❤️</button>
+<button class="btn btn-no" id="no-btn" onmouseover="moveNoButton()">Aww, maybe later 😘</button>
+</div>
+
+<footer>
+A Valentine surprise by <span style="color:#d81b60;">Deba</span>
+</footer>
+
+</div>
+
+<div id="success-overlay">
+<h2 style="font-family:'Dancing Script'; font-size:4rem; color:#ff4d6d;">Yay! It's a Date, Shewta! 🥂</h2>
+<p style="font-size:1.2rem; margin:20px;">Date night incoming! I can't wait to see you.</p>
+<div class="countdown" id="timer"></div>
+<button class="btn btn-yes" onclick="location.reload()">Back</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<script>
+const bg = document.getElementById('bg-elements');
+const items = ['🧁','🎈','✨','💖','☁️','🌸'];
+
+for(let i=0;i<20;i++){
+    let div=document.createElement('div');
+    div.className='float-item';
+    div.innerText=items[Math.floor(Math.random()*items.length)];
+    div.style.left=Math.random()*100+'vw';
+    div.style.animationDelay=Math.random()*5+'s';
+    div.style.fontSize=(Math.random()*20+20)+'px';
+    bg.appendChild(div);
+}
+
+let noMoves=0;
+function moveNoButton(){
+    const btn=document.getElementById('no-btn');
+    noMoves++;
+    const x=Math.random()*(window.innerWidth-btn.offsetWidth);
+    const y=Math.random()*(window.innerHeight-btn.offsetHeight);
+    btn.style.left=x+'px';
+    btn.style.top=y+'px';
+}
+
+function celebrate(){
+    document.getElementById("bg-music").play();
+
+    for(let i=0;i<5;i++){
+        setTimeout(()=>{
+            confetti({particleCount:150,spread:70,origin:{y:0.6}});
+        },i*200);
+    }
+
+    setTimeout(()=>{
+        document.getElementById('success-overlay').style.display='flex';
+        updateCountdown();
+    },500);
+}
+
+function updateCountdown(){
+    const valentines=new Date("Feb 14, 2026 00:00:00").getTime();
+    setInterval(()=>{
+        const now=new Date().getTime();
+        const diff=valentines-now;
+        const d=Math.floor(diff/(1000*60*60*24));
+        const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+        const m=Math.floor((diff%(1000*60*60))/(1000*60));
+        const s=Math.floor((diff%(1000*60))/1000);
+        document.getElementById('timer').innerHTML=`${d}d ${h}h ${m}m ${s}s until our big day!`;
+    },1000);
+}
+
+document.querySelectorAll('.reason-heart').forEach(h=>{
+    h.addEventListener('click',()=>{
+        confetti({particleCount:30,spread:50});
+    });
+});
+</script>
+
+</body>
+</html>
